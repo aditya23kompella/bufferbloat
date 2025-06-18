@@ -1,0 +1,21 @@
+Name: Aditya Kompella
+UWNetID: akomp
+
+Name: Julien Prefot
+UWNetID: julienp
+
+Instructions to reproduce the results:
+  Once you are in the directory, run sudo ./run.sh to run the lab with TCP Reno. Wait for it to finish executing and see the averages and std_devs print statements for both q = 20 and q = 100. The port can be changed in webserver.py and at the top of bufferbloat.py using the `PORT` variable. To run TCP BBR, run sudo ./run_bbr.sh. In case of a keyboard interrupt or other failure, run sudo mn -c before rerunning the .sh files. 
+
+Answers to the questions:
+Part 2
+  1. When q = 20, the average webpage fetch time is 2.77542 and the standard deviation is 0.2729996762079483. When q = 100, the average is 11.269106833333334 and the standard deviation is 1.1781032651904010.
+  2. In short buffers, when TCP notices congestion, it is able to reduce the sending rate and quickly recover from it. However, when there is a large buffer size and there are many packets in the buffer, once congestion is noticed it takes a long time to send all the queued packets through and reduce it, which is the essence of the bufferbloat problem.
+  3. The transmit queue length on the network interface reported by ifconfig is 1000 packets. To calculate the maximum time a packet might wait in the queue before it leaves the NIC, we just need to calculate the number of packets * maximum packet size / drain rate. This simplifies to 1000 * 1500 bytes = 1.5 MB = 12 Mb / 100 Mb/s = 0.12 s.
+  4. As the queue size goes up, so does the RTT reported by ping. They have a direct relationship. Large queue sizes report high RTTs when the buffer is nearing capacity.
+  5. We can use congestion control algorithms. One of them is TCP Vegas, where we calculate the expected throughput and compare it with the actual throughput. If the actual is more than expected, then we can decrease window. By adjusting the send rate before the queue loses packets, Vegas avoids bufferbloat. Another technique is TCP BBR, where instead of adjusting the congestion window the pacing of traffic is controlled. The bottleneck bandwidth (maximum data rate) is measured and the packets are paced at this rate. It also probes for minimum and maximum RTT to detect if there is a buildup or more bandwidth available. 
+Part 3
+  1. When q = 20, the average webpage fetch time is 2.6985123333333334 and the standard deviation is 0.3618624334608695. When q = 100, the average is 11.472745666666667 and the standard deviation is 1.3429523677505804.
+  2. TODO
+  3. TODO
+  4. TODO
